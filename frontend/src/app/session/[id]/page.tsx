@@ -348,9 +348,15 @@ export default function SessionPage() {
 
 
                         {/* 2. Socratic Question */}
-                        <div className={`transition-all ${isActive ? 'text-zinc-900' : 'text-zinc-700'}`}>
+                        <div className="transition-all">
                           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.6 }}>
-                            <div className="prose prose-zinc dark:prose-invert prose-sm sm:prose-base max-w-none prose-p:leading-relaxed prose-p:font-medium prose-pre:bg-zinc-900 prose-pre:text-zinc-50 prose-code:text-purple-700 prose-code:bg-purple-50 prose-code:px-1 prose-code:rounded prose-code:before:content-none prose-code:after:content-none">
+                            <div className={cn(
+                              "prose prose-sm sm:prose-base max-w-none prose-p:leading-relaxed prose-p:font-medium",
+                              "prose-pre:bg-zinc-900 prose-pre:text-zinc-50 prose-code:text-purple-700 prose-code:bg-purple-50 prose-code:px-1 prose-code:rounded prose-code:before:content-none prose-code:after:content-none",
+                              isActive 
+                                ? "prose-p:text-zinc-900 prose-headings:text-zinc-900 prose-strong:text-zinc-900 prose-li:text-zinc-900" 
+                                : "prose-p:text-zinc-500 prose-headings:text-zinc-500 prose-strong:text-zinc-500 prose-li:text-zinc-500"
+                            )}>
                               <ReactMarkdown 
                                 remarkPlugins={[remarkMath]}
                                 rehypePlugins={[rehypeKatex]}
