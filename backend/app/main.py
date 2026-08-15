@@ -583,13 +583,41 @@ async def chat_endpoint(req: ChatRequest, background_tasks: BackgroundTasks, db:
     if not db_profile:
         raise HTTPException(status_code=404, detail="Student Profile not found")
 
+    # Fetch weak topics
+    weak_topics_result = await db.execute(
+        select(StudentConceptMastery.concept)
+        .where(StudentConceptMastery.studentId == req.student_id)
+        .where(StudentConceptMastery.status != ConceptStatus.KNOWN)
+        .limit(5)
+    )
+    weak_topics = weak_topics_result.scalars().all()
+
+    # Fetch misconception history
+    misconceptions_result = await db.execute(
+        select(StudentMisconception.concept)
+        .where(StudentMisconception.studentId == req.student_id)
+        .order_by(StudentMisconception.frequency.desc())
+        .limit(5)
+    )
+    misconception_history = misconceptions_result.scalars().all()
+
+    # Fetch recent sessions
+    recent_sessions_result = await db.execute(
+        select(DBSession.topic)
+        .where(DBSession.studentId == req.student_id)
+        .where(DBSession.id != req.session_id)
+        .order_by(DBSession.createdAt.desc())
+        .limit(3)
+    )
+    recent_sessions = [topic for topic in recent_sessions_result.scalars().all() if topic]
+
     profile_ctx = StudentProfileContext(
         grade=db_profile.grade or "Unknown",
-        weakTopics=[],
-        misconceptionHistory=[],
+        weakTopics=list(weak_topics),
+        misconceptionHistory=list(misconception_history),
         pace=db_profile.learningPace.value if db_profile.learningPace else "MEDIUM",
         strictnessPreference="HINT_ONLY",
-        recentSessions=[]
+        recentSessions=list(recent_sessions)
     )
 
     session_ctx = CurrentSessionContext(
