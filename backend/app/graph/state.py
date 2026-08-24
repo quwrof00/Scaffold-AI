@@ -21,6 +21,7 @@ class GraphState(TypedDict):
     extracted_text: Optional[str]  # Text extracted from image/pdf if applicable
     
     # Contexts
+    student_id: Optional[str]
     profile: StudentProfileContext
     session: CurrentSessionContext
     
@@ -34,6 +35,10 @@ class GraphState(TypedDict):
     current_misconception: Optional[str] # Determined by rule engine
     next_action: Optional[str] # e.g., "diagnose", "guide", "reflect"
     understanding: int # Tracks progress
+    
+    # Safety
+    is_safe: Optional[bool]
+    safety_violation_reason: Optional[str]
     
     # End of Session variables
     is_completion_check: Optional[bool]

@@ -21,7 +21,7 @@ def analyze_student_prompt(prompt: str) -> RuleEngineResult:
     if not api_key:
         raise ValueError("GROQ_API_KEY is missing")
 
-    llm = ChatGroq(temperature=0, model_name="llama-3.1-8b-instant", groq_api_key=api_key)
+    llm = ChatGroq(temperature=0, model_name="openai/gpt-oss-20b", groq_api_key=api_key)
     
     # We use a structured output approach
     structured_llm = llm.with_structured_output(RuleEngineResult)
