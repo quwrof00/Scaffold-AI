@@ -428,8 +428,7 @@ export default function SessionPage() {
                 );
               })}
 
-              {/* Global Loading state for the next step */}
-              {isLoading && steps.length > 1 && (
+              {isLoading && steps.length > 0 && (
                 <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="flex gap-5 mt-8">
                   <div className="w-12 h-12 rounded-2xl bg-zinc-100 flex items-center justify-center text-zinc-400 z-10 shrink-0">
                     <Loader2 className="w-5 h-5 animate-spin" />

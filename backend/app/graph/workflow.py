@@ -3,6 +3,7 @@ from app.graph.state import GraphState
 from app.graph.nodes.rule_engine import rule_engine_node
 from app.graph.nodes.llm_layer import diagnosis_node, socratic_node, hint_node, concept_graph_generator_node, concept_evaluator_node
 from app.graph.nodes.objective_evaluator import objective_evaluator_node
+from app.graph.nodes.guardrail import guardrail_node
 
 def route_after_rules(state: GraphState):
     """Router based on the next_action determined by the rule engine."""
@@ -28,6 +29,12 @@ def route_after_rules(state: GraphState):
         return "socratic_node"
     return "diagnosis_node"
 
+def route_after_guardrail(state: GraphState):
+    """If the message is unsafe, end the graph immediately."""
+    if state.get("is_safe") is False:
+        return END
+    return "rule_engine"
+
 def build_workflow():
     workflow = StateGraph(GraphState)
     
@@ -39,9 +46,19 @@ def build_workflow():
     workflow.add_node("concept_graph_generator_node", concept_graph_generator_node)
     workflow.add_node("concept_evaluator_node", concept_evaluator_node)
     workflow.add_node("objective_evaluator_node", objective_evaluator_node)
+    workflow.add_node("guardrail_node", guardrail_node)
     
     # Add edges
-    workflow.add_edge(START, "rule_engine")
+    workflow.add_edge(START, "guardrail_node")
+    
+    workflow.add_conditional_edges(
+        "guardrail_node",
+        route_after_guardrail,
+        {
+            END: END,
+            "rule_engine": "rule_engine"
+        }
+    )
     
     # Conditional edge after rule engine
     workflow.add_conditional_edges(

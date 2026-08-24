@@ -5,19 +5,20 @@ from pydantic import BaseModel, Field
 from langchain_groq import ChatGroq
 from app.graph.state import GraphState
 from dotenv import load_dotenv
+from app.services.mem0_client import extract_and_store_memory, get_student_context
 
 load_dotenv()
 
 # Initialize Groq Model (streaming for token-by-token output)
 grok_model = ChatGroq(
-    model="llama-3.1-8b-instant", 
+    model="openai/gpt-oss-20b", 
     api_key=os.getenv("GROQ_API_KEY", "dummy-key-for-now"),
     streaming=True
 )
 
 # Non-streaming model for structured output (streaming + structured output causes issues on Groq)
 grok_model_structured = ChatGroq(
-    model="llama-3.1-8b-instant",
+    model="openai/gpt-oss-20b",
     api_key=os.getenv("GROQ_API_KEY", "dummy-key-for-now"),
     streaming=False
 )
@@ -56,6 +57,12 @@ def _build_system_prompt(state: GraphState, role: str) -> str:
         prompt += f"- Subject: {subject}\n"
         prompt += f"- Problem: {problem}\n"
         prompt += f"- Failed Attempts: {failed_attempts}\n"
+        
+    # Inject Mem0 long-term memory
+    student_id = state.get("student_id", "default_student_id")
+    mem0_context = get_student_context("student learning preferences, hobbies, and past struggles", user_id=student_id)
+    if mem0_context:
+        prompt += f"\nLong-Term AI Memory:\n{mem0_context}\n"
         
     return prompt
 
@@ -110,6 +117,10 @@ def concept_evaluator_node(state: GraphState) -> GraphState:
     
     if not messages or not graph or not states:
         return state
+        
+    # Extract and store long-term memory facts from this conversation
+    student_id = state.get("student_id", "default_student_id")
+    extract_and_store_memory(messages[-2:], user_id=student_id)
         
     graph_str = str(graph)
     current_states_str = str(states)
@@ -216,7 +227,14 @@ def socratic_node(state: GraphState) -> GraphState:
     if concept_states:
         contextual_info += f" | Concept States: {concept_states}. Focus on guiding the student to understand the earliest UNKNOWN or MISCONCEPTION concept."
         
-    sys_prompt = _build_system_prompt(state, f"Socratic Tutor. Context: {contextual_info}. Ask ONE targeted question to help the student. DO NOT give the answer. If they made a sign error, guide them toward signs.")
+    sys_prompt = _build_system_prompt(
+        state, 
+        f"Socratic Tutor. Context: {contextual_info}. "
+        "CRITICAL RULES:\n"
+        "1. Acknowledge and evaluate the student's latest response.\n"
+        "2. If they are incorrect or confused, gently point out the flaw in their logic WITHOUT giving the final answer.\n"
+        "3. Ask ONE new targeted follow-up question to guide them to the next step. DO NOT repeat the previous question."
+    )
     
     response = grok_model.invoke([SystemMessage(content=sys_prompt)] + messages)
     
