@@ -60,7 +60,7 @@ export function Header({ title, subtitle, actions, className }: HeaderProps) {
         {/* Streak Counter */}
         {profile && profile.streak > 0 && (
           <Tooltip content="Daily Streak">
-            <div className="flex items-center gap-1 px-2.5 py-1.5 rounded-full bg-orange-50 text-orange-600 border border-orange-100 mr-2 shadow-sm">
+            <div className="flex items-center gap-1 px-2.5 py-1.5 rounded-full bg-orange-50 dark:bg-orange-950/40 text-orange-600 dark:text-orange-400 border border-orange-100 dark:border-orange-800/50 mr-2 shadow-sm">
               <Flame className="h-3.5 w-3.5 fill-orange-500 text-orange-500" />
               <span className="text-xs font-bold">{profile.streak}</span>
             </div>

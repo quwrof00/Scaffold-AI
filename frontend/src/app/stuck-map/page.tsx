@@ -80,7 +80,7 @@ export default function StuckMapPage() {
                       <span className="text-lg font-extrabold text-zinc-800 block leading-tight">{m.frequency}</span>
                       <span className="text-[9px] text-zinc-400 font-medium uppercase tracking-wider">stuck events</span>
                     </div>
-                    <span className="text-[9.5px] font-bold px-2 py-0.5 rounded-full border bg-red-50 text-red-700 border-red-200/50">
+                    <span className="text-[9.5px] font-bold px-2 py-0.5 rounded-full border bg-red-50 dark:bg-red-950/40 text-red-700 dark:text-red-300 border-red-200/50 dark:border-red-800/50">
                       Active
                     </span>
                   </div>
@@ -102,7 +102,7 @@ export default function StuckMapPage() {
               ) : Object.entries(subjectGroups).map(([subject, concepts]) => (
                 <div key={subject} className="space-y-2.5">
                   <div className="flex items-center gap-2 font-bold text-xs text-zinc-800">
-                    <div className="w-4 h-4 rounded bg-purple-100 border border-purple-200 text-purple-700 flex items-center justify-center font-bold text-[9px]">
+                    <div className="w-4 h-4 rounded bg-purple-100 dark:bg-purple-900/40 border border-purple-200 dark:border-purple-700/50 text-purple-700 dark:text-purple-300 flex items-center justify-center font-bold text-[9px]">
                       {subject[0]}
                     </div>
                     <span>{subject}</span>
@@ -113,10 +113,10 @@ export default function StuckMapPage() {
                         <div className="flex items-center gap-2">
                           <span className="font-semibold text-zinc-700">{c.concept}</span>
                           {c.status === "MISCONCEPTION" && (
-                            <span className="text-[8px] bg-red-100 text-red-800 px-1 rounded font-bold uppercase">Misconception</span>
+                            <span className="text-[8px] bg-red-100 dark:bg-red-950/50 text-red-800 dark:text-red-300 px-1 rounded font-bold uppercase border border-red-200 dark:border-red-900/40">Misconception</span>
                           )}
                           {c.status === "KNOWN" && (
-                            <span className="text-[8px] bg-emerald-100 text-emerald-800 px-1 rounded font-bold uppercase">Known</span>
+                            <span className="text-[8px] bg-emerald-100 dark:bg-emerald-950/50 text-emerald-800 dark:text-emerald-300 px-1 rounded font-bold uppercase border border-emerald-200 dark:border-emerald-900/40">Known</span>
                           )}
                         </div>
                         <span className="text-[10px] text-zinc-400 font-medium">{c.attempts} attempts</span>

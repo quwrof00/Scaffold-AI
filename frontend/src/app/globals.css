@@ -1,5 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
 @import "tailwindcss";
+@custom-variant dark (&:where(.dark, .dark *));
 @plugin "@tailwindcss/typography";
 
 @layer base {
@@ -44,42 +45,124 @@
   }
 
   .dark {
-    --background: 240 15% 9%;
-    --foreground: 248 25% 94%;
+    /* ── Layered Dark UI Hierarchy ──
+       Target: page background < card background < input/nested elements < borders */
 
-    --surface: 240 14% 12%;
-    --surface-2: 240 13% 16%;
-    --surface-3: 240 12% 20%;
+    /* Layer 1: Page Canvas — Very dark charcoal, warm & soft, not pure black */
+    --background: 228 13% 11%;
+    --foreground: 228 20% 95%;
 
-    --border: 240 12% 20%;
-    --border-subtle: 240 12% 16%;
+    /* Layer 2: Cards, Panels, Sidebar — Clearly separated from page canvas */
+    --surface: 228 13% 16%;
 
-    --primary: 262 75% 65%;
-    --primary-hover: 262 75% 71%;
+    /* Layer 3: Inputs, Nested Cards, Recessed elements — Clearly distinct from card */
+    --surface-2: 228 13% 21%;
+
+    /* Layer 4: Interactive hover, elevated elements, inactive tabs */
+    --surface-3: 228 12% 26%;
+
+    /* Layer 5: Borders & Dividers — Subtle but crisp and clearly visible */
+    --border: 228 12% 28%;
+    --border-subtle: 228 12% 21%;
+
+    /* Purple & Pink Accents — Brightened for dark mode vibrancy and legibility */
+    --primary: 262 85% 70%;
+    --primary-hover: 262 85% 76%;
     --primary-foreground: 0 0% 100%;
 
-    --muted: 240 12% 18%;
-    --muted-foreground: 240 10% 56%;
+    --accent: 285 75% 68%;
+    --accent-2: 220 90% 70%;
+    --accent-warm: 32 95% 64%;
+
+    /* Text hierarchy tokens */
+    --muted: 228 13% 21%;
+    --muted-foreground: 228 12% 64%;
+
+    --success: 155 70% 50%;
+    --warning: 38 95% 60%;
+    --danger: 0 80% 65%;
+
+    --shadow-soft: 0 2px 10px rgba(0, 0, 0, 0.4);
+    --shadow-card: 0 4px 24px rgba(0, 0, 0, 0.5);
+    --shadow-elevated: 0 8px 36px rgba(0, 0, 0, 0.7);
   }
 
-  /* Automatically map hardcoded tailwind colors to semantic ones for instant dark mode */
-  @theme {
+  /* Deliberate dark-mode color hierarchy for Tailwind utilities:
+     page background (11%) < card background (16%) < input/nested (21%) < active/hover (26%) < borders (28%)
+     and
+     primary text (95%) > secondary/headings (88%-80%) > metadata (72%-64%) > muted/placeholder (56%) */
+  .dark {
+    /* Surfaces */
     --color-white: hsl(var(--surface));
     --color-black: hsl(var(--foreground));
-    
+
+    /* Surface & Input progression */
     --color-zinc-50: hsl(var(--surface-2));
     --color-zinc-100: hsl(var(--surface-3));
+
+    /* Visible borders */
     --color-zinc-200: hsl(var(--border));
-    --color-zinc-300: hsl(var(--border));
-    
-    --color-zinc-400: hsl(var(--muted-foreground));
-    --color-zinc-500: hsl(var(--muted-foreground));
-    --color-zinc-600: hsl(var(--muted-foreground));
-    
-    --color-zinc-700: hsl(var(--foreground));
-    --color-zinc-800: hsl(var(--foreground));
-    --color-zinc-900: hsl(var(--foreground));
-    --color-zinc-950: hsl(var(--foreground));
+    --color-zinc-300: hsl(228 12% 34%);
+
+    /* Deliberate accessible text hierarchy */
+    --color-zinc-400: hsl(228 11% 56%);  /* Muted text, timestamps, input placeholders */
+    --color-zinc-500: hsl(228 12% 64%);  /* Secondary text, descriptions, subtitles */
+    --color-zinc-600: hsl(228 12% 72%);  /* Medium emphasis, body secondary */
+    --color-zinc-700: hsl(228 13% 80%);  /* High emphasis secondary text */
+    --color-zinc-800: hsl(228 15% 88%);  /* Section titles, strong card headers */
+    --color-zinc-900: hsl(228 20% 95%);  /* Primary headings, near-white with strong contrast */
+    --color-zinc-950: hsl(228 20% 97%);  /* Highest contrast text */
+
+    /* Accessible purple/pink accents for active text and glowing highlights */
+    --color-purple-500: hsl(262 85% 66%);
+    --color-purple-600: hsl(262 85% 70%);
+    --color-purple-700: hsl(262 85% 76%);
+    --color-purple-800: hsl(262 85% 82%);
+  }
+
+  /* High contrast text guarantees on colored/gradient surfaces in dark mode */
+  .dark .text-white,
+  .dark [class*="text-white"],
+  .dark button[class*="bg-gradient"],
+  .dark a[class*="bg-gradient"] {
+    color: #ffffff !important;
+  }
+
+  .dark .text-white * {
+    color: inherit;
+  }
+
+  /* Purple hero banner body text light lavender high-contrast color */
+  .dark .text-purple-100 {
+    color: #f3e8ff !important;
+  }
+
+  /* Form controls & typography in dark mode */
+  .dark select option {
+    background-color: hsl(var(--surface-2));
+    color: hsl(var(--foreground));
+  }
+
+  .dark input:focus, .dark textarea:focus {
+    background-color: hsl(var(--surface-2)) !important;
+  }
+
+  .dark .prose {
+    --tw-prose-body: hsl(228 13% 80%);
+    --tw-prose-headings: hsl(var(--foreground));
+    --tw-prose-lead: hsl(var(--muted-foreground));
+    --tw-prose-links: hsl(var(--primary));
+    --tw-prose-bold: hsl(var(--foreground));
+    --tw-prose-counters: hsl(var(--muted-foreground));
+    --tw-prose-bullets: hsl(var(--border));
+    --tw-prose-hr: hsl(var(--border));
+    --tw-prose-quotes: hsl(var(--foreground));
+    --tw-prose-quote-borders: hsl(var(--primary) / 0.5);
+    --tw-prose-code: hsl(var(--primary));
+    --tw-prose-pre-code: hsl(var(--foreground));
+    --tw-prose-pre-bg: hsl(var(--surface-2));
+    --tw-prose-th-borders: hsl(var(--border));
+    --tw-prose-td-borders: hsl(var(--border-subtle));
   }
 
   * {
@@ -131,3 +214,181 @@
   --font-serif-editorial: "Instrument Serif", Georgia, serif;
 }
 body { font-family: var(--font-sans); }
+
+/* ==========================================================================
+   TARGETED DARK MODE OVERRIDES (High Specificity)
+   ========================================================================== */
+
+/* 1. Sidebar Navigation in Dark Mode */
+.dark #app-desktop-sidebar,
+.dark aside {
+  background-color: #171821 !important;
+  border-right-color: rgba(255, 255, 255, 0.08) !important;
+}
+
+/* Inactive navigation links: Stuck Map, History, Settings, etc. */
+.dark aside nav a:not([class*="bg-[hsl(var(--primary)"]):not([class*="dark:bg-purple"]):not([class*="active"]),
+.dark .sidebar-nav-item:not(.active) {
+  color: #d1d5db !important; /* light gray text */
+}
+
+.dark .sidebar-nav-item:not(.active) .sidebar-nav-label {
+  color: #d1d5db !important;
+}
+
+.dark aside nav a:not([class*="bg-[hsl(var(--primary)"]):not([class*="dark:bg-purple"]):not([class*="active"]):hover,
+.dark .sidebar-nav-item:not(.active):hover,
+.dark .sidebar-nav-item:not(.active):hover .sidebar-nav-label {
+  color: #ffffff !important;
+  background-color: rgba(255, 255, 255, 0.07) !important;
+}
+
+/* Inactive navigation icons */
+.dark aside nav a:not([class*="bg-[hsl(var(--primary)"]):not([class*="dark:bg-purple"]):not([class*="active"]) svg,
+.dark aside nav a:not([class*="bg-[hsl(var(--primary)"]):not([class*="dark:bg-purple"]):not([class*="active"]) span svg,
+.dark .sidebar-nav-item:not(.active) .sidebar-nav-icon,
+.dark .sidebar-nav-item:not(.active) .sidebar-nav-icon svg {
+  color: #9ca3af !important; /* light gray icon */
+  stroke: #9ca3af !important;
+}
+
+.dark aside nav a:not([class*="bg-[hsl(var(--primary)"]):not([class*="dark:bg-purple"]):not([class*="active"]):hover svg,
+.dark aside nav a:not([class*="bg-[hsl(var(--primary)"]):not([class*="dark:bg-purple"]):not([class*="active"]):hover span svg,
+.dark .sidebar-nav-item:not(.active):hover .sidebar-nav-icon,
+.dark .sidebar-nav-item:not(.active):hover .sidebar-nav-icon svg {
+  color: #ffffff !important;
+  stroke: #ffffff !important;
+}
+
+/* Active Dashboard item: retain vibrant purple accent */
+.dark aside nav a[class*="bg-[hsl(var(--primary)"],
+.dark aside nav a[class*="dark:bg-purple"],
+.dark aside nav a.active,
+.dark .sidebar-nav-item.active {
+  background-color: rgba(168, 85, 247, 0.15) !important;
+  color: #c084fc !important;
+}
+
+.dark .sidebar-nav-item.active .sidebar-nav-label {
+  color: #c084fc !important;
+}
+
+.dark aside nav a[class*="bg-[hsl(var(--primary)"] svg,
+.dark aside nav a[class*="dark:bg-purple"] svg,
+.dark aside nav a.active svg,
+.dark .sidebar-nav-item.active .sidebar-nav-icon,
+.dark .sidebar-nav-item.active .sidebar-nav-icon svg {
+  color: #c084fc !important;
+  stroke: #c084fc !important;
+}
+
+/* Category section titles (e.g. LEARNING, TOOLS, etc.) */
+.dark aside nav p {
+  color: #9ca3af !important;
+}
+
+/* Account / profile card in sidebar */
+.dark aside div[class*="rounded-[var(--radius-md)]"][class*="bg-"] {
+  background-color: #1e202b !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+}
+
+.dark .sidebar-user-name,
+.dark aside div[class*="rounded-[var(--radius-md)]"][class*="bg-"] p:first-child {
+  color: #ffffff !important; /* Profile name */
+}
+
+.dark .sidebar-user-email,
+.dark aside div[class*="rounded-[var(--radius-md)]"][class*="bg-"] p:nth-child(2) {
+  color: #9ca3af !important; /* Profile email */
+}
+
+.dark .sidebar-brand-label,
+.dark aside div[class*="rounded-[var(--radius-md)]"][class*="bg-"] span {
+  color: #9ca3af !important; /* ScaffoldAI label */
+}
+
+/* Logout button */
+.dark .sidebar-logout-btn,
+.dark .sidebar-logout-btn span,
+.dark aside div[class*="rounded-[var(--radius-md)]"] button,
+.dark aside div[class*="rounded-[var(--radius-md)]"] button span {
+  color: #e5e7eb !important; /* readable light gray/white */
+}
+
+.dark .sidebar-logout-btn svg,
+.dark aside div[class*="rounded-[var(--radius-md)]"] button svg {
+  color: #e5e7eb !important;
+  stroke: #e5e7eb !important;
+}
+
+.dark .sidebar-logout-btn:hover,
+.dark .sidebar-logout-btn:hover span,
+.dark aside div[class*="rounded-[var(--radius-md)]"] button:hover,
+.dark aside div[class*="rounded-[var(--radius-md)]"] button:hover span {
+  color: #f87171 !important;
+}
+
+.dark .sidebar-logout-btn:hover svg,
+.dark aside div[class*="rounded-[var(--radius-md)]"] button:hover svg {
+  color: #f87171 !important;
+  stroke: #f87171 !important;
+}
+
+/* Header Sign Out */
+.dark .header-signout-btn,
+.dark .header-signout-btn span {
+  color: #d1d5db !important;
+}
+
+.dark .header-signout-btn svg {
+  color: #d1d5db !important;
+  stroke: #d1d5db !important;
+}
+
+.dark .header-signout-btn:hover,
+.dark .header-signout-btn:hover span {
+  color: #ffffff !important;
+}
+
+.dark .header-signout-btn:hover svg {
+  color: #ffffff !important;
+  stroke: #ffffff !important;
+}
+
+/* 2. Purple Hero Banner in Dark Mode */
+.dark .hero-banner h1,
+.hero-banner h1 {
+  color: #FFFFFF !important;
+}
+
+.dark .hero-banner p,
+.dark .hero-description {
+  color: #E9E7F2 !important;
+}
+
+.dark .hero-label-level,
+.dark .hero-label-streak,
+.hero-banner .hero-label-level,
+.hero-banner .hero-label-streak {
+  color: #D8D2E8 !important;
+}
+
+.dark .hero-number-level,
+.dark .hero-number-streak,
+.hero-banner .hero-number-level,
+.hero-banner .hero-number-streak {
+  color: #FFFFFF !important;
+}
+
+/* 3. Start Session Button in Dark Mode */
+.btn-start-session,
+.btn-start-session span,
+.btn-start-session svg,
+.dark .btn-start-session,
+.dark .btn-start-session span,
+.dark .btn-start-session svg {
+  color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+}
+

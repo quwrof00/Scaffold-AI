@@ -93,7 +93,7 @@ export default function DashboardPage() {
 
   return (
     <AppShell headerTitle="Student Dashboard" headerSubtitle={`Welcome back, ${userName}`} headerActions={
-      <button onClick={() => signOut({ callbackUrl: "/login" })} className="flex items-center gap-1.5 text-xs text-zinc-500 hover:text-zinc-800 transition">
+      <button onClick={() => signOut({ callbackUrl: "/login" })} className="header-signout-btn flex items-center gap-1.5 text-xs text-zinc-500 dark:text-zinc-300 hover:text-zinc-800 dark:hover:text-white transition">
         <LogOut className="w-3.5 h-3.5" />
         Sign out
       </button>
@@ -106,16 +106,16 @@ export default function DashboardPage() {
         <div className="lg:col-span-2 space-y-6">
 
           {/* Welcome Back Card */}
-          <div className="relative overflow-hidden rounded-2xl border border-purple-100 bg-gradient-to-r from-purple-900 via-indigo-900 to-purple-950 p-6 md:p-8 text-[#ffffff] shadow-lg">
+          <div className="hero-banner relative overflow-hidden rounded-2xl border border-purple-100 dark:border-purple-500/25 bg-gradient-to-r from-purple-900 via-indigo-900 to-purple-950 p-6 md:p-8 text-[#ffffff] shadow-lg">
             {/* Visual backdrop grid */}
             <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff05_1px,transparent_1px),linear-gradient(to_bottom,#ffffff05_1px,transparent_1px)] bg-[size:24px_24px] pointer-events-none" />
 
             <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
               <div className="space-y-3">
-                <h1 className="text-3xl font-light tracking-tight md:text-4xl text-[#ffffff]" style={{ fontFamily: 'var(--font-serif-editorial)' }}>
+                <h1 className="text-3xl font-light tracking-tight md:text-4xl text-[#ffffff]" style={{ fontFamily: 'var(--font-serif-editorial)', color: '#FFFFFF' }}>
                   A truly personalized learning journey
                 </h1>
-                <p className="text-sm text-purple-100 max-w-md leading-relaxed">
+                <p className="hero-description text-sm text-purple-100 max-w-md leading-relaxed font-normal" style={{ color: '#E9E7F2' }}>
                   You&apos;re making great progress! Keep exploring and resolving your stuck points.
                 </p>
               </div>
@@ -123,14 +123,14 @@ export default function DashboardPage() {
               {/* Dynamic Important Number */}
               <div className="flex items-center gap-4 flex-shrink-0">
                 <div className="flex flex-col items-center justify-center w-20 h-20 rounded-full bg-white/10 backdrop-blur-md border border-white/20 shadow-xl">
-                  <span className="text-[10px] font-bold text-zinc-300 uppercase tracking-widest mb-1">Level</span>
-                  <span className="text-3xl font-black text-[#ffffff] leading-none">
+                  <span className="hero-label-level text-[10px] font-bold uppercase tracking-widest mb-1" style={{ color: '#D8D2E8' }}>Level</span>
+                  <span className="hero-number-level text-3xl font-black leading-none" style={{ color: '#FFFFFF' }}>
                     {profile ? Math.max(1, Math.floor((profile.xp || 0) / 500) + 1) : 1}
                   </span>
                 </div>
                 <div className="flex flex-col items-center justify-center w-20 h-20 rounded-full bg-pink-500/10 backdrop-blur-md border border-pink-500/20 shadow-xl">
-                  <span className="text-[10px] font-bold text-pink-300 uppercase tracking-widest mb-1">Streak</span>
-                  <span className="text-2xl font-black text-pink-100 leading-none flex items-center gap-1">
+                  <span className="hero-label-streak text-[10px] font-bold uppercase tracking-widest mb-1" style={{ color: '#D8D2E8' }}>Streak</span>
+                  <span className="hero-number-streak text-2xl font-black leading-none flex items-center gap-1" style={{ color: '#FFFFFF' }}>
                     {profile?.streak || 0} <span className="text-xl">🔥</span>
                   </span>
                 </div>
@@ -163,17 +163,18 @@ export default function DashboardPage() {
                 <button
                   type="submit"
                   disabled={isStartingSession || !prompt.trim()}
-                  className="inline-flex items-center justify-center gap-1.5 bg-gradient-to-r from-purple-600 to-pink-500 text-white font-semibold text-sm px-6 py-3 rounded-xl hover:opacity-95 disabled:opacity-60 disabled:cursor-not-allowed active:scale-[0.98] transition-all shadow-md shrink-0"
+                  className="btn-start-session inline-flex items-center justify-center gap-1.5 bg-gradient-to-r from-purple-600 to-pink-500 !text-white font-semibold text-sm px-6 py-3 rounded-xl hover:opacity-95 disabled:opacity-60 disabled:cursor-not-allowed active:scale-[0.98] transition-all shadow-md shrink-0"
+                  style={{ color: '#FFFFFF' }}
                 >
                   {isStartingSession ? (
                     <>
-                      <Loader2 className="w-4 h-4 animate-spin" />
-                      <span>Starting...</span>
+                      <Loader2 className="w-4 h-4 animate-spin !text-white" style={{ color: '#FFFFFF' }} />
+                      <span className="!text-white font-semibold" style={{ color: '#FFFFFF' }}>Starting...</span>
                     </>
                   ) : (
                     <>
-                      <span>Start Session</span>
-                      <ArrowRight className="w-4 h-4" />
+                      <span className="!text-white font-semibold" style={{ color: '#FFFFFF' }}>Start Session</span>
+                      <ArrowRight className="w-4 h-4 !text-white stroke-[2.5]" style={{ color: '#FFFFFF', stroke: '#FFFFFF' }} />
                     </>
                   )}
                 </button>
