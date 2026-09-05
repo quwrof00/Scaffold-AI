@@ -28,26 +28,26 @@ function NavIcon({ name }: { name: string }) {
 
 function SidebarNavItem({ item, isCollapsed }: { item: NavItem; isCollapsed: boolean }) {
   const pathname = usePathname();
-  const isActive = pathname === item.href || pathname.startsWith(item.href + "/");
+  const isActive = pathname === item.href || (item.href !== "/dashboard" && pathname.startsWith(item.href + "/"));
 
   const content = (
     <Link
       href={item.href}
       title={isCollapsed ? item.label : undefined}
       className={cn(
-        "relative flex items-center gap-3 rounded-[var(--radius-md)] px-3 py-2.5 text-sm font-medium transition-all duration-150 group",
+        "sidebar-nav-item relative flex items-center gap-3 rounded-[var(--radius-md)] px-3 py-2.5 text-sm font-medium transition-all duration-150 group",
         isActive
-          ? "bg-[hsl(var(--primary)/0.1)] text-[hsl(var(--primary))]"
-          : "text-[hsl(var(--muted-foreground))] hover:bg-[hsl(var(--surface-2))] hover:text-[hsl(var(--foreground))]",
+          ? "active bg-[hsl(var(--primary)/0.1)] text-[hsl(var(--primary))] dark:bg-purple-500/15 dark:text-purple-400 font-semibold"
+          : "text-[hsl(var(--muted-foreground))] dark:text-zinc-300 hover:bg-[hsl(var(--surface-2))] hover:text-[hsl(var(--foreground))] dark:hover:text-white dark:hover:bg-white/5",
         isCollapsed && "justify-center px-0"
       )}
     >
-      <span className={cn("relative z-10", isActive && "text-[hsl(var(--primary))]")}>
+      <span className={cn("sidebar-nav-icon relative z-10 transition-colors", isActive ? "text-[hsl(var(--primary))] dark:text-purple-400" : "text-zinc-500 dark:text-zinc-400 group-hover:text-zinc-900 dark:group-hover:text-white")}>
         <NavIcon name={item.icon} />
       </span>
-      {!isCollapsed && <span className="relative z-10 truncate">{item.label}</span>}
+      {!isCollapsed && <span className="sidebar-nav-label relative z-10 truncate">{item.label}</span>}
       {item.badge && !isCollapsed && (
-        <span className="ml-auto relative z-10 text-xs bg-[hsl(var(--primary)/0.15)] text-[hsl(var(--primary))] px-1.5 py-0.5 rounded-full font-medium">
+        <span className="ml-auto relative z-10 text-xs bg-[hsl(var(--primary)/0.15)] text-[hsl(var(--primary))] dark:bg-purple-900/40 dark:text-purple-300 px-1.5 py-0.5 rounded-full font-medium">
           {item.badge}
         </span>
       )}
@@ -72,19 +72,19 @@ export function DesktopSidebar() {
   }, [session]);
 
   return (
-    <aside className={cn("hidden md:flex flex-col h-screen bg-[hsl(var(--surface))] border-r border-[hsl(var(--border))] relative z-20 flex-shrink-0 transition-all duration-300", isCollapsed ? "w-[72px]" : "w-[240px]")}>
+    <aside id="app-desktop-sidebar" className={cn("hidden md:flex flex-col h-screen bg-[hsl(var(--surface))] dark:bg-[#171821] border-r border-[hsl(var(--border))] dark:border-white/10 relative z-20 flex-shrink-0 transition-all duration-300", isCollapsed ? "w-[72px]" : "w-[240px]")}>
       {/* Logo */}
       <div className={cn("flex items-center h-[var(--header-height)] flex-shrink-0", isCollapsed ? "justify-center px-2" : "justify-between px-4")}>
         <Link href="/dashboard" className="flex items-center gap-2.5 min-w-0" title={isCollapsed ? "ScaffoldAI" : undefined}>
           <div className="w-8 h-8 bg-[hsl(var(--primary))] rounded-md flex items-center justify-center shrink-0">
              <span className="text-white font-bold text-sm">S</span>
           </div>
-          {!isCollapsed && <span className="font-bold text-[15px] tracking-tight text-[hsl(var(--foreground))] overflow-hidden whitespace-nowrap">
+          {!isCollapsed && <span className="font-bold text-[15px] tracking-tight text-[hsl(var(--foreground))] dark:text-white overflow-hidden whitespace-nowrap">
             ScaffoldAI
           </span>}
         </Link>
         {!isCollapsed && (
-          <button onClick={toggleCollapse} className="p-1 rounded-md hover:bg-[hsl(var(--surface-2))] text-[hsl(var(--muted-foreground))] transition-colors">
+          <button onClick={toggleCollapse} className="p-1 rounded-md hover:bg-[hsl(var(--surface-2))] dark:hover:bg-white/5 text-[hsl(var(--muted-foreground))] dark:text-zinc-400 dark:hover:text-zinc-200 transition-colors">
             <ChevronLeft size={18} />
           </button>
         )}
@@ -92,7 +92,7 @@ export function DesktopSidebar() {
       
       {isCollapsed && (
         <div className="flex justify-center mb-2">
-          <button onClick={toggleCollapse} className="p-1.5 rounded-md hover:bg-[hsl(var(--surface-2))] text-[hsl(var(--muted-foreground))] transition-colors border border-[hsl(var(--border))]">
+          <button onClick={toggleCollapse} className="p-1.5 rounded-md hover:bg-[hsl(var(--surface-2))] dark:hover:bg-white/5 text-[hsl(var(--muted-foreground))] dark:text-zinc-400 dark:hover:text-zinc-200 transition-colors border border-[hsl(var(--border))] dark:border-white/10">
             <ChevronRight size={16} />
           </button>
         </div>
@@ -103,12 +103,12 @@ export function DesktopSidebar() {
         {navSections.map((section) => (
           <div key={section.id} className="space-y-0.5">
             {section.label && !isCollapsed && (
-              <p className="text-[10px] font-semibold uppercase tracking-widest text-[hsl(var(--muted-foreground)/0.6)] px-3 py-2">
+              <p className="text-[10px] font-semibold uppercase tracking-widest text-[hsl(var(--muted-foreground)/0.6)] dark:text-zinc-400 px-3 py-2">
                 {section.label}
               </p>
             )}
             {section.label && isCollapsed && (
-              <div className="h-px w-8 mx-auto bg-[hsl(var(--border))] my-2" />
+              <div className="h-px w-8 mx-auto bg-[hsl(var(--border))] dark:bg-white/10 my-2" />
             )}
             {section.items.map((item) => (
               <SidebarNavItem key={item.id} item={item} isCollapsed={isCollapsed} />
@@ -118,21 +118,21 @@ export function DesktopSidebar() {
       </nav>
 
       {/* User card */}
-      <div className="px-3 py-3 border-t border-[hsl(var(--border))] flex-shrink-0">
-        <div className={cn("rounded-[var(--radius-md)] bg-[hsl(var(--surface-2))] p-3 space-y-2.5", isCollapsed && "flex flex-col items-center p-2")}>
+      <div className="px-3 py-3 border-t border-[hsl(var(--border))] dark:border-white/10 flex-shrink-0">
+        <div className={cn("sidebar-user-card rounded-[var(--radius-md)] bg-[hsl(var(--surface-2))] dark:bg-[#1e202b] dark:border dark:border-white/10 p-3 space-y-2.5", isCollapsed && "flex flex-col items-center p-2")}>
           <div className={cn("flex items-center gap-2.5 min-w-0", isCollapsed && "justify-center")}>
             <Avatar name={userName} size="sm" />
             {!isCollapsed && (
               <div className="flex-1 min-w-0">
-                <p className="text-sm font-semibold truncate leading-tight">{userName}</p>
-                <p className="text-[11px] text-[hsl(var(--muted-foreground))] truncate">{session?.user?.email || ""}</p>
+                <p className="sidebar-user-name text-sm font-semibold truncate leading-tight text-zinc-900 dark:text-zinc-100">{userName}</p>
+                <p className="sidebar-user-email text-[11px] text-[hsl(var(--muted-foreground))] dark:text-zinc-400 truncate">{session?.user?.email || ""}</p>
               </div>
             )}
           </div>
           {!isCollapsed && (
             <div className="space-y-1">
               <div className="flex justify-between items-center">
-                <span className="text-[10px] text-[hsl(var(--muted-foreground))]">ScaffoldAI</span>
+                <span className="sidebar-brand-label text-[10px] text-[hsl(var(--muted-foreground))] dark:text-zinc-400">ScaffoldAI</span>
               </div>
             </div>
           )}
@@ -140,7 +140,7 @@ export function DesktopSidebar() {
             <button
               onClick={() => signOut({ callbackUrl: "/login" })}
               title={isCollapsed ? "Log out" : undefined}
-              className={cn("p-2 w-full flex items-center justify-center gap-2 text-[hsl(var(--muted-foreground))] hover:bg-[hsl(var(--destructive)/0.1)] hover:text-[hsl(var(--destructive))] rounded-[var(--radius-sm)] transition-colors text-xs font-semibold", isCollapsed && "px-0")}
+              className={cn("sidebar-logout-btn p-2 w-full flex items-center justify-center gap-2 text-[hsl(var(--muted-foreground))] dark:text-zinc-300 hover:bg-[hsl(var(--destructive)/0.1)] hover:text-[hsl(var(--destructive))] dark:hover:text-red-400 dark:hover:bg-red-950/40 rounded-[var(--radius-sm)] transition-colors text-xs font-semibold", isCollapsed && "px-0")}
             >
               <LogOut className="h-4 w-4" />
               {!isCollapsed && <span>Log out</span>}

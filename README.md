@@ -9,6 +9,8 @@ Scaffold AI is an advanced, AI-driven educational platform designed to act as a 
 - **Socratic Diagnostician:** Identifies exactly where a student is stuck and asks targeted questions to prompt critical thinking.
 - **Rule Engine:** Deterministically catches common mistakes (like sign errors in math) to provide immediate, context-aware intervention.
 - **Student Profiling:** Adapts pacing, strictness, and hints based on the student's historical performance and weak topics.
+- **Long-Term Memory:** Integrates Mem0 to persistently remember student facts, preferences, and long-term struggles across different sessions.
+- **Prompt Safety:** Dual-layer AI guardrails using Meta's Llama Prompt Guard to intercept jailbreaks and ensure safe student interactions.
 
 ## Architecture Overview
 
@@ -65,7 +67,9 @@ graph TD
 
 ### Backend
 - **Framework:** FastAPI
-- **AI / LLM Orchestration:** LangGraph, LangChain, Groq (Llama 3.1)
+- **AI / LLM Orchestration:** LangGraph, LangChain, Groq (gpt-oss-20b)
+- **Memory & Continuity:** Mem0 (long-term factual extraction and storage)
+- **Safety & Guardrails:** Llama Prompt Guard 2 + Regex heuristics
 - **Database:** SQLite (with AsyncIO support via aiosqlite)
 - **ORM & Migrations:** SQLAlchemy, Alembic
 - **State Management:** LangGraph Checkpoints

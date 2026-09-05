@@ -328,7 +328,7 @@ export default function SessionPage() {
 
                     <div className="flex gap-4">
                       {/* Step Number Badge */}
-                      <div className={`w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm shrink-0 transition-colors z-10 ${isActive ? 'bg-zinc-900 text-white shadow-md' : 'bg-zinc-100 text-zinc-400'
+                      <div className={`w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm shrink-0 transition-colors z-10 ${isActive ? 'bg-zinc-900 text-white shadow-md dark:bg-purple-600 dark:text-white' : 'bg-zinc-100 text-zinc-400 dark:bg-zinc-800/80 dark:text-zinc-400'
                         }`}>
                         {index}
                       </div>
@@ -400,14 +400,14 @@ export default function SessionPage() {
                                   }
                                 }}
                                 placeholder="Your reasoning (Shift+Enter for new line)..."
-                                className="flex-1 bg-white border border-zinc-200 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-zinc-400 focus:ring-1 focus:ring-zinc-400 transition-all shadow-sm resize-none scrollbar-hide leading-relaxed"
+                                className="flex-1 bg-white dark:bg-[hsl(var(--surface-2))] border border-zinc-200 dark:border-[hsl(var(--border))] text-zinc-800 dark:text-[hsl(var(--foreground))] rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-zinc-400 dark:focus:border-[hsl(var(--primary))] focus:ring-1 focus:ring-zinc-400 dark:focus:ring-[hsl(var(--primary)/0.3)] transition-all shadow-sm resize-none scrollbar-hide leading-relaxed placeholder-zinc-400 dark:placeholder-[hsl(var(--muted-foreground))]"
                                 disabled={isLoading}
                               />
                               <motion.button
                                 whileTap={{ scale: 0.95 }}
                                 type="submit"
                                 disabled={isLoading || !inputValue.trim()}
-                                className="bg-zinc-900 text-white px-6 py-3 rounded-lg text-sm font-semibold hover:bg-zinc-800 disabled:opacity-50 disabled:cursor-not-allowed transition-all flex items-center gap-2 h-fit"
+                                className="bg-zinc-900 text-white dark:bg-purple-600 dark:hover:bg-purple-500 px-6 py-3 rounded-lg text-sm font-semibold hover:bg-zinc-800 disabled:opacity-50 disabled:cursor-not-allowed transition-all flex items-center gap-2 h-fit"
                               >
                                 {isLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : <span>Submit</span>}
                               </motion.button>
@@ -416,9 +416,9 @@ export default function SessionPage() {
                           )
                         ) : (
                           <div className="pt-2">
-                            <div className="inline-block bg-zinc-50 border border-zinc-100 rounded-lg px-4 py-2">
+                            <div className="inline-block bg-zinc-50 dark:bg-[hsl(var(--surface-2))] border border-zinc-100 dark:border-[hsl(var(--border))] rounded-lg px-4 py-2">
                               <span className="text-[9px] font-bold text-zinc-400 uppercase tracking-widest block mb-0.5">Your Answer</span>
-                              <p className="text-sm text-zinc-700 font-medium">{step.studentAnswer}</p>
+                              <p className="text-sm text-zinc-700 dark:text-[hsl(var(--foreground))] font-medium">{step.studentAnswer}</p>
                             </div>
                           </div>
                         )}

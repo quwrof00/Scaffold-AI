@@ -45,7 +45,7 @@ export function MobileBottomNav() {
                 "flex-1 flex flex-col items-center justify-center gap-0.5 py-1 rounded-xl transition-colors",
                 isActive
                   ? "text-[hsl(var(--primary))]"
-                  : "text-[hsl(var(--muted-foreground))]"
+                  : "text-[hsl(var(--muted-foreground))] dark:text-zinc-300"
               )}
             >
               <div className="relative">
@@ -140,8 +140,8 @@ export function MobileDrawer() {
                         className={cn(
                           "flex items-center gap-3 rounded-[var(--radius-md)] px-3 py-2.5 text-sm font-medium transition-colors",
                           isActive
-                            ? "bg-[hsl(var(--primary)/0.1)] text-[hsl(var(--primary))]"
-                            : "text-[hsl(var(--muted-foreground))] hover:bg-[hsl(var(--surface-2))] hover:text-[hsl(var(--foreground))]"
+                            ? "bg-[hsl(var(--primary)/0.1)] text-[hsl(var(--primary))] dark:bg-purple-500/15 dark:text-purple-400 font-semibold"
+                            : "text-[hsl(var(--muted-foreground))] dark:text-zinc-300 hover:bg-[hsl(var(--surface-2))] hover:text-[hsl(var(--foreground))] dark:hover:text-white dark:hover:bg-white/5"
                         )}
                       >
                         <Icon className="h-[18px] w-[18px] flex-shrink-0" strokeWidth={1.75} />
@@ -158,8 +158,8 @@ export function MobileDrawer() {
               <div className="flex items-center gap-3 mb-3">
                 <Avatar name={userName} size="md" />
                 <div className="flex-1 min-w-0">
-                  <p className="text-sm font-semibold">{userName}</p>
-                  <p className="text-xs text-[hsl(var(--muted-foreground))]">{userEmail}</p>
+                  <p className="text-sm font-semibold text-zinc-900 dark:text-zinc-100">{userName}</p>
+                  <p className="text-xs text-[hsl(var(--muted-foreground))] dark:text-zinc-400">{userEmail}</p>
                 </div>
               </div>
             </div>

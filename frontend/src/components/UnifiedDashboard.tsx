@@ -124,7 +124,7 @@ export function UnifiedDashboard({ role }: { role: "Teacher" | "Parent" }) {
                     <span className="text-[10px] font-bold text-zinc-400 uppercase tracking-widest mb-1">Level</span>
                     <span className="text-3xl font-black text-purple-600">{profile ? Math.max(1, Math.floor((profile.xp || 0) / 500) + 1) : "-"}</span>
                   </div>
-                  <div className="bg-orange-50/50 rounded-xl p-4 border border-orange-100/50 flex flex-col items-center justify-center text-center">
+                  <div className="bg-orange-50/50 dark:bg-orange-950/30 rounded-xl p-4 border border-orange-100/50 dark:border-orange-800/40 flex flex-col items-center justify-center text-center">
                     <span className="text-[10px] font-bold text-orange-400 uppercase tracking-widest mb-1">Streak</span>
                     <span className="text-3xl font-black text-orange-500 flex items-center gap-1">{profile?.streak || 0}<span className="text-xl">🔥</span></span>
                   </div>
@@ -142,9 +142,9 @@ export function UnifiedDashboard({ role }: { role: "Teacher" | "Parent" }) {
                 ) : (
                   <div className="space-y-3">
                     {misconceptions.map((m) => (
-                      <div key={m.id} className="bg-orange-50/50 border border-orange-100 p-3 rounded-xl">
-                        <p className="text-sm font-semibold text-orange-900">{m.concept}</p>
-                        <p className="text-xs text-orange-700/80 mt-1">Encountered {m.frequency} time{m.frequency > 1 ? 's' : ''}</p>
+                      <div key={m.id} className="bg-orange-50/50 dark:bg-orange-950/30 border border-orange-100 dark:border-orange-800/40 p-3 rounded-xl">
+                        <p className="text-sm font-semibold text-orange-900 dark:text-orange-200">{m.concept}</p>
+                        <p className="text-xs text-orange-700/80 dark:text-orange-400 mt-1">Encountered {m.frequency} time{m.frequency > 1 ? 's' : ''}</p>
                       </div>
                     ))}
                   </div>
